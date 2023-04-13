@@ -183,6 +183,38 @@ def time_to_graph_size_experiment(max_n):
     plt.show()
 
 
+def compare_accuracy_to_graph_size(max_nodes):
+    '''
+    Test the accuracy of Dijkstra's algorithm approximation and Bellman-Ford's algorithm approximation to the size of the graph.
+    :param max_nodes:
+    :return:
+    '''
+
+    dijkstra_approx_errors = []
+    bellman_ford_approx_errors = []
+
+    for n in range(1, max_nodes + 1):
+        G = create_random_complete_graph(n, 10)
+        source = 0
+
+        dijkstra_approx_error = 0
+        bellman_ford_approx_error = 0
+
+        for _ in range(10):
+            dijkstra_approx_error += abs(total_dist(dijkstra(G, source)) - total_dist(dijkstra_approx(G, source, 2)))
+            bellman_ford_approx_error += abs(total_dist(bellman_ford(G, source)) - total_dist(bellman_ford_approx(G, source, 2)))
+
+        dijkstra_approx_errors.append(dijkstra_approx_error / 10)
+        bellman_ford_approx_errors.append(bellman_ford_approx_error / 10)
+
+    plt.plot(range(1, max_nodes + 1), dijkstra_approx_errors, label="Dijkstra Approximation")
+    plt.plot(range(1, max_nodes + 1), bellman_ford_approx_errors, label="Bellman-Ford Approximation")
+    plt.xlabel("Number of nodes")
+    plt.ylabel("Error")
+    plt.legend()
+    plt.show()
+
+
 def time_dijkstra(G, source):
     start = timeit.default_timer()
     print(dijkstra(G, source))
