@@ -140,12 +140,11 @@ def total_dist(dist):
 
 
 # Experiment Suite 1
-def time_to_graph_size_experiment(max_n, number_of_runs):
+def time_to_graph_size_experiment(max_n):
     '''
     Test the running time of Dijkstra's algorithm and Bellman-Ford's algorithm, as well as their respecitve approximations
     compared to the size of the graph.
     :param max_n:
-    :param number_of_runs:
     :return:
     '''
 
@@ -163,16 +162,16 @@ def time_to_graph_size_experiment(max_n, number_of_runs):
         bellman_ford_time = 0
         bellman_ford_approx_time = 0
 
-        for _ in range(number_of_runs):
+        for _ in range(10):
             dijkstra_time += time_dijkstra(G, source)
-            dijkstra_approx_time += time_dijkstra_approx(G, source, 3)
+            dijkstra_approx_time += time_dijkstra_approx(G, source, 1)
             bellman_ford_time += time_bellman_ford(G, source)
-            bellman_ford_approx_time += time_bellman_ford_approx(G, source, 3)
+            bellman_ford_approx_time += time_bellman_ford_approx(G, source, 1)
 
-        dijkstra_times.append(dijkstra_time / number_of_runs)
-        dijkstra_approx_times.append(dijkstra_approx_time / number_of_runs)
-        bellman_ford_times.append(bellman_ford_time / number_of_runs)
-        bellman_ford_approx_times.append(bellman_ford_approx_time / number_of_runs)
+        dijkstra_times.append(dijkstra_time / 10)
+        dijkstra_approx_times.append(dijkstra_approx_time / 10)
+        bellman_ford_times.append(bellman_ford_time / 10)
+        bellman_ford_approx_times.append(bellman_ford_approx_time / 10)
 
     plt.plot(range(1, max_n + 1), dijkstra_times, label="Dijkstra")
     plt.plot(range(1, max_n + 1), dijkstra_approx_times, label="Dijkstra Approximation")
