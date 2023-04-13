@@ -247,6 +247,39 @@ def accuracy_to_k_experiment(max_k):
     plt.show()
 
 
+def time_to_k_experiment(max_k):
+    '''
+    Test the running time of Dijkstra's algorithm approximation and Bellman-Ford's algorithm approximation to the number of
+    relaxations allowed.
+    :param max_k:
+    :return:
+    '''
+
+    dijkstra_approx_times = []
+    bellman_ford_approx_times = []
+
+    for k in range(1, max_k + 1):
+        G = create_random_complete_graph(10, 10)
+        source = 0
+
+        dijkstra_approx_time = 0
+        bellman_ford_approx_time = 0
+
+        for _ in range(10):
+            dijkstra_approx_time += time_dijkstra_approx(G, source, k)
+            bellman_ford_approx_time += time_bellman_ford_approx(G, source, k)
+
+        dijkstra_approx_times.append(dijkstra_approx_time / 10)
+        bellman_ford_approx_times.append(bellman_ford_approx_time / 10)
+
+    plt.plot(range(1, max_k + 1), dijkstra_approx_times, label="Dijkstra Approximation")
+    plt.plot(range(1, max_k + 1), bellman_ford_approx_times, label="Bellman-Ford Approximation")
+    plt.xlabel("Number of relaxations")
+    plt.ylabel("Running time (seconds)")
+    plt.legend()
+    plt.show()
+
+
 def time_dijkstra(G, source):
     start = timeit.default_timer()
     print(dijkstra(G, source))
