@@ -1,5 +1,8 @@
 import min_heap
 import random
+import matplotlib.pyplot as plt
+import numpy as np
+import timeit
 
 class DirectedWeightedGraph:
 
@@ -134,6 +137,80 @@ def total_dist(dist):
     for key in dist.keys():
         total += dist[key]
     return total
+
+
+# Experiment Suite 1
+def time_to_graph_size_experiment(max_n, number_of_runs):
+    '''
+    Test the running time of Dijkstra's algorithm and Bellman-Ford's algorithm, as well as their respecitve approximations
+    compared to the size of the graph.
+    :param max_n:
+    :param number_of_runs:
+    :return:
+    '''
+
+    dijkstra_times = []
+    dijkstra_approx_times = []
+    bellman_ford_times = []
+    bellman_ford_approx_times = []
+
+    for n in range(1, max_n + 1):
+        G = create_random_complete_graph(n, 10)
+        source = 0
+
+        dijkstra_time = 0
+        dijkstra_approx_time = 0
+        bellman_ford_time = 0
+        bellman_ford_approx_time = 0
+
+        for _ in range(number_of_runs):
+            dijkstra_time += time_dijkstra(G, source)
+            dijkstra_approx_time += time_dijkstra_approx(G, source, 3)
+            bellman_ford_time += time_bellman_ford(G, source)
+            bellman_ford_approx_time += time_bellman_ford_approx(G, source, 3)
+
+        dijkstra_times.append(dijkstra_time / number_of_runs)
+        dijkstra_approx_times.append(dijkstra_approx_time / number_of_runs)
+        bellman_ford_times.append(bellman_ford_time / number_of_runs)
+        bellman_ford_approx_times.append(bellman_ford_approx_time / number_of_runs)
+
+    plt.plot(range(1, max_n + 1), dijkstra_times, label="Dijkstra")
+    plt.plot(range(1, max_n + 1), dijkstra_approx_times, label="Dijkstra Approximation")
+    plt.plot(range(1, max_n + 1), bellman_ford_times, label="Bellman-Ford")
+    plt.plot(range(1, max_n + 1), bellman_ford_approx_times, label="Bellman-Ford Approximation")
+    plt.xlabel("Number of nodes")
+    plt.ylabel("Running time (seconds)")
+    plt.legend()
+    plt.show()
+
+
+def time_dijkstra(G, source):
+    start = timeit.default_timer()
+    print(dijkstra(G, source))
+    end = timeit.default_timer()
+    return end - start
+
+
+def time_dijkstra_approx(G, source, k):
+    start = timeit.default_timer()
+    print(dijkstra_approx(G, source, k))
+    end = timeit.default_timer()
+    return end - start
+
+
+def time_bellman_ford(G, source):
+    start = timeit.default_timer()
+    print(bellman_ford(G, source))
+    end = timeit.default_timer()
+    return end - start
+
+
+def time_bellman_ford_approx(G, source, k):
+    start = timeit.default_timer()
+    print(bellman_ford_approx(G, source, k))
+    end = timeit.default_timer()
+    return end - start
+
 
 def create_random_complete_graph(n,upper):
     G = DirectedWeightedGraph()
