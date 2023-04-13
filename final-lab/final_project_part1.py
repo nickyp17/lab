@@ -183,7 +183,7 @@ def time_to_graph_size_experiment(max_n):
     plt.show()
 
 
-def compare_accuracy_to_graph_size(max_nodes):
+def accuracy_to_graph_size_experiment(max_nodes):
     '''
     Test the accuracy of Dijkstra's algorithm approximation and Bellman-Ford's algorithm approximation to the size of the graph.
     :param max_nodes:
