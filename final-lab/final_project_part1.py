@@ -215,7 +215,7 @@ def accuracy_to_graph_size_experiment(max_nodes):
     plt.show()
 
 
-def accuracy_to_k_experiment(max_k):
+def accuracy_to_num_relax_experiment(max_k):
     '''
     Test the accuracy of Dijkstra's algorithm approximation and Bellman-Ford's algorithm approximation to the number of
     relaxations allowed.
@@ -247,7 +247,7 @@ def accuracy_to_k_experiment(max_k):
     plt.show()
 
 
-def time_to_k_experiment(max_k):
+def time_to_num_relax_experiment(max_k):
     '''
     Test the running time of Dijkstra's algorithm approximation and Bellman-Ford's algorithm approximation to the number of
     relaxations allowed.
