@@ -140,7 +140,7 @@ def total_dist(dist):
 
 
 # Experiment Suite 1
-def time_to_graph_size_experiment(max_n):
+def time_to_graph_size_experiment(max_n, k=2):
     '''
     Test the running time of Dijkstra's algorithm and Bellman-Ford's algorithm, as well as their respecitve approximations
     compared to the size of the graph.
@@ -164,9 +164,9 @@ def time_to_graph_size_experiment(max_n):
 
         for _ in range(10):
             dijkstra_time += time_dijkstra(G, source)
-            dijkstra_approx_time += time_dijkstra_approx(G, source, 1)
+            dijkstra_approx_time += time_dijkstra_approx(G, source, k)
             bellman_ford_time += time_bellman_ford(G, source)
-            bellman_ford_approx_time += time_bellman_ford_approx(G, source, 1)
+            bellman_ford_approx_time += time_bellman_ford_approx(G, source, k)
 
         dijkstra_times.append(dijkstra_time / 10)
         dijkstra_approx_times.append(dijkstra_approx_time / 10)
@@ -178,12 +178,13 @@ def time_to_graph_size_experiment(max_n):
     plt.plot(range(1, max_n + 1), bellman_ford_times, label="Bellman-Ford")
     plt.plot(range(1, max_n + 1), bellman_ford_approx_times, label="Bellman-Ford Approximation")
     plt.xlabel("Number of nodes")
-    plt.ylabel("Running time (seconds)")
+    plt.ylabel(f"Running time (seconds) (k={k})")
+    plt.title("Shortest Path Running Time vs. Number of Nodes")
     plt.legend()
     plt.show()
 
 
-def accuracy_to_graph_size_experiment(max_nodes):
+def accuracy_to_graph_size_experiment(max_nodes, k=2):
     '''
     Test the accuracy of Dijkstra's algorithm approximation and Bellman-Ford's algorithm approximation to the size of the graph.
     :param max_nodes:
@@ -201,16 +202,17 @@ def accuracy_to_graph_size_experiment(max_nodes):
         bellman_ford_approx_error = 0
 
         for _ in range(10):
-            dijkstra_approx_error += abs(total_dist(dijkstra(G, source)) - total_dist(dijkstra_approx(G, source, 2)))
-            bellman_ford_approx_error += abs(total_dist(bellman_ford(G, source)) - total_dist(bellman_ford_approx(G, source, 2)))
+            dijkstra_approx_error += abs(total_dist(dijkstra(G, source)) - total_dist(dijkstra_approx(G, source, k)))
+            bellman_ford_approx_error += abs(total_dist(bellman_ford(G, source)) - total_dist(bellman_ford_approx(G, source, k)))
 
         dijkstra_approx_errors.append(dijkstra_approx_error / 10)
         bellman_ford_approx_errors.append(bellman_ford_approx_error / 10)
 
     plt.plot(range(1, max_nodes + 1), dijkstra_approx_errors, label="Dijkstra Approximation")
     plt.plot(range(1, max_nodes + 1), bellman_ford_approx_errors, label="Bellman-Ford Approximation")
+    plt.title("Shortest Path Approximation Error vs. Number of Nodes")
     plt.xlabel("Number of nodes")
-    plt.ylabel("Error")
+    plt.ylabel(f"Error (k = {k})")
     plt.legend()
     plt.show()
 
@@ -231,7 +233,7 @@ def accuracy_to_num_relax_experiment(max_k):
         bellman_ford_approx_error = 0
 
         for _ in range(10):
-            G = create_random_complete_graph(10, 10)
+            G = create_random_complete_graph(100, 10)
             source = 0
             dijkstra_approx_error += abs(total_dist(dijkstra(G, source)) - total_dist(dijkstra_approx(G, source, k)))
             bellman_ford_approx_error += abs(total_dist(bellman_ford(G, source)) - total_dist(bellman_ford_approx(G, source, k)))
@@ -242,7 +244,8 @@ def accuracy_to_num_relax_experiment(max_k):
     plt.plot(range(1, max_k + 1), dijkstra_approx_errors, label="Dijkstra Approximation")
     plt.plot(range(1, max_k + 1), bellman_ford_approx_errors, label="Bellman-Ford Approximation")
     plt.xlabel("Number of relaxations")
-    plt.ylabel("Error")
+    plt.ylabel("Error (n = 100)")
+    plt.title("Shortest Path Approximation Error vs. Number of Relaxations")
     plt.legend()
     plt.show()
 
@@ -259,7 +262,7 @@ def time_to_num_relax_experiment(max_k):
     bellman_ford_approx_times = []
 
     for k in range(1, max_k + 1):
-        G = create_random_complete_graph(10, 10)
+        G = create_random_complete_graph(100, 10)
         source = 0
 
         dijkstra_approx_time = 0
@@ -275,35 +278,37 @@ def time_to_num_relax_experiment(max_k):
     plt.plot(range(1, max_k + 1), dijkstra_approx_times, label="Dijkstra Approximation")
     plt.plot(range(1, max_k + 1), bellman_ford_approx_times, label="Bellman-Ford Approximation")
     plt.xlabel("Number of relaxations")
-    plt.ylabel("Running time (seconds)")
+    plt.ylabel("Running time (seconds) (n = 100)")
+    plt.title("Shortest Path Running Time vs. Number of Relaxations")
     plt.legend()
+    plt.figure(figsize=(10, 10))
     plt.show()
 
 
 def time_dijkstra(G, source):
     start = timeit.default_timer()
-    print(dijkstra(G, source))
+    dijkstra(G, source)
     end = timeit.default_timer()
     return end - start
 
 
 def time_dijkstra_approx(G, source, k):
     start = timeit.default_timer()
-    print(dijkstra_approx(G, source, k))
+    dijkstra_approx(G, source, k)
     end = timeit.default_timer()
     return end - start
 
 
 def time_bellman_ford(G, source):
     start = timeit.default_timer()
-    print(bellman_ford(G, source))
+    bellman_ford(G, source)
     end = timeit.default_timer()
     return end - start
 
 
 def time_bellman_ford_approx(G, source, k):
     start = timeit.default_timer()
-    print(bellman_ford_approx(G, source, k))
+    bellman_ford_approx(G, source, k)
     end = timeit.default_timer()
     return end - start
 
@@ -339,3 +344,25 @@ def init_d(G):
                 d[i][j] = G.w(i, j)
         d[i][i] = 0
     return d
+
+
+def test_mystery_complexity():
+    mystery_times = []
+
+    for n in range(1, 101):
+        G = create_random_complete_graph(n, 10)
+        mystery_time = 0
+
+        start = timeit.default_timer()
+        mystery(G)
+        end = timeit.default_timer()
+        mystery_time += end - start
+
+        mystery_times.append(mystery_time)
+
+    plt.plot(range(1, 101), mystery_times)
+    plt.xlabel("Number of nodes")
+    plt.ylabel("Running time (seconds)")
+    plt.title("Running time of mystery function vs. Number of nodes")
+    plt.show()
+
